@@ -1,0 +1,561 @@
+<?xml version="1.0" ?>
+<robot name="tas_car" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<!-- =================================================================================== 
+     Description: TAS2 urdf file.
+                  This file is made to test the ackermann steering (in progress).
+     Author: Salman Bari
+     Date: Oct 29, 2022                             
+     =================================================================================== -->
+
+  <!-- ************ visual materials ************ -->
+  <material name="Grey">
+    <color rgba="0.7 0.7 0.7 1.0"/>
+  </material>
+  <material name="Green">
+    <color rgba="0.0 1.0 0.0 1.0"/>
+  </material>
+  <material name="Red">
+    <color rgba="1.0 0.0 0.0 1.0"/>
+  </material>
+  <material name="tas_blue">
+    <color rgba="0.01 0.552 1.0 1.0"/>
+  </material>
+  <material name="Black">
+    <color rgba="0 0 0 1.0"/>
+  </material>
+
+  <!-- ************ TAS2 basefootprint and base ************ -->
+  <link name="base_footprint"/>
+  <link name="base">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://tas2-simulator/models/meshes/model_base_reduced.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://tas2-simulator/models/meshes/model_base_reduced.dae"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="15.0"/>
+      <inertia ixx="0.0135" ixy="0.0" ixz="0.0" iyy="0.03" iyz="0.0" izz="0.433"/>
+    </inertial>
+  </link>
+  <joint name="base_footprint_base_joint" type="fixed">
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="0.1795 0 0"/>
+    <parent link="base_footprint"/>
+    <child link="base"/>
+  </joint>
+
+  <!-- ************ NUC PC related links and joints ************ -->
+  <link name="nuc_base">
+    <visual>
+      <geometry>
+        <box size="0.12 0.12 0.095"/>
+      </geometry>
+      <material name="tas_blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.12 0.12 0.095"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.00195" ixy="0.0" ixz="0.0" iyy="0.00195" iyz="0.0" izz="0.0024"/>
+    </inertial>
+  </link>
+  <gazebo reference="nuc_base">
+    <material>tas_blue</material>
+  </gazebo>
+  <joint name="base_nuc_base_joint" type="fixed">
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="-0.04 0.096 0.065"/>
+    <parent link="base"/>
+    <child link="nuc_base"/>
+  </joint>
+  <link name="nuc">
+    <visual>
+      <geometry>
+        <box size="0.11 0.11 0.035"/>
+      </geometry>
+      <material name="Black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.11 0.11 0.035"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.0011" ixy="0.0" ixz="0.0" iyy="0.0011" iyz="0.0" izz="0.00202"/>
+    </inertial>
+  </link>
+  <gazebo reference="nuc">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <joint name="nuc_base_nuc_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0.065"/>
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <parent link="nuc_base"/>
+    <child link="nuc"/>
+  </joint>
+
+  <!-- ************ Battery holder and battery related links and joints ************ -->
+  <link name="battery_holder">
+    <visual>
+      <geometry>
+        <box size="0.04 0.145 0.09"/>
+      </geometry>
+      <material name="tas_blue"/>
+    </visual>
+    <visual>
+      <origin rpy="0 0 0" xyz="0.06 0.0225 -0.025"/>
+      <geometry>
+        <box size="0.08 0.1 0.04"/>
+      </geometry>
+      <material name="tas_blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.04 0.145 0.09"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.06 0.0225 -0.025"/>
+      <geometry>
+        <box size="0.08 0.1 0.04"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.00243" ixy="0.0" ixz="0.0" iyy="0.0008" iyz="0.0" izz="0.00189"/>
+    </inertial>
+    <inertial>
+      <mass value="0.001"/>
+      <ineria ixx="0.00097" ixy="0.0" ixz="0.0" iyy="0.0007" iyz="0.0" izz="0.00137"/>
+      <origin rpy="0 0 0" xyz="0.06 0.0225 -0.025"/>
+    </inertial>
+  </link>
+  <gazebo reference="battery_holder">
+    <material>tas_blue</material>
+  </gazebo>
+  <joint name="base_battery_holder_joint" type="fixed">
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="-0.025 -0.1235 0.065"/>
+    <parent link="base"/>
+    <child link="battery_holder"/>
+  </joint>
+  <link name="battery">
+    <visual>
+      <geometry>
+        <box size="0.075 0.11 0.05"/>
+      </geometry>
+      <material name="Black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.075 0.11 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.00122" ixy="0.0" ixz="0.0" iyy="0.00068" iyz="0.0" izz="0.00148"/>
+    </inertial>
+  </link>
+  <gazebo reference="battery">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <joint name="battery_holder_battery_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.06 0.01 0.02"/>
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <parent link="battery_holder"/>
+    <child link="battery"/>
+  </joint>
+
+  <!-- ************ Wheels related links and joints ************ -->
+  <!--  Front rigt wheel  -->
+  <link name="r_ack_link">
+    <visual>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="tas_blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+  <gazebo reference="r_ack_link">
+    <material>tas_blue</material>
+  </gazebo>
+  <joint name="r_ack_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0.1794 -0.19189 0.0435"/>
+    <axis rpy="0 0 0" xyz="0 1 0"/>
+    <parent link="base"/>
+    <child link="r_ack_link"/>
+    <limit upper="1e+16" lower="-1e+16" effort="1e+16" velocity="20"/>
+  </joint>
+  <link name="r_f_wheel">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://tas2-simulator/models/meshes/model_wheel_right.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tas2-simulator/models/meshes/model_wheel_right_collision.dae"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.00812" ixy="0.0" ixz="0.0" iyy="0.00812" iyz="0.0" izz="0.0156"/>
+    </inertial>
+  </link>
+  <gazebo reference="r_f_wheel">
+    <fdir1>1 0 0</fdir1>
+    <maxContacts>1</maxContacts>
+    <minDepth>0.005</minDepth>
+    <collision>
+      <surface>
+        <friction>
+          <ode>
+            <mu>100000.0</mu>
+            <mu2>100000.0</mu2>
+            <slip1>0.0</slip1>
+            <slip2>0.0</slip2>
+          </ode>
+          <torsional>
+            <coefficient>10.0</coefficient>
+            <surface_radius>1.0</surface_radius>
+            <use_patch_radius>true</use_patch_radius>
+          </torsional>
+        </friction>
+      </surface>
+    </collision>
+  </gazebo>
+  <!--  Front left wheel  -->
+  <link name="l_ack_link">
+    <visual>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="tas_blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+  <gazebo reference="l_ack_link">
+    <material>tas_blue</material>
+  </gazebo>
+  <joint name="l_ack_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0.1794 0.19189 0.0435"/>
+    <axis rpy="0 0 0" xyz="0 1 0"/>
+    <parent link="base"/>
+    <child link="l_ack_link"/>
+    <limit upper="1e+16" lower="-1e+16" effort="1e+16" velocity="20"/>
+
+  </joint>
+  <link name="l_f_wheel">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://tas2-simulator/models/meshes/model_wheel_left.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tas2-simulator/models/meshes/model_wheel_left_collision.dae"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.00812" ixy="0.0" ixz="0.0" iyy="0.00812" iyz="0.0" izz="0.0156"/>
+    </inertial>
+  </link>
+  <gazebo reference="l_f_wheel">
+    <fdir1>1 0 0</fdir1>
+    <maxContacts>1</maxContacts>
+    <minDepth>0.005</minDepth>
+    <collision>
+      <surface>
+        <friction>
+          <ode>
+            <mu>100000.0</mu>
+            <mu2>100000.0</mu2>
+            <slip1>0.0</slip1>
+            <slip2>0.0</slip2>
+          </ode>
+          <torsional>
+            <coefficient>10.0</coefficient>
+            <surface_radius>1.0</surface_radius>
+            <use_patch_radius>true</use_patch_radius>
+          </torsional>
+        </friction>
+      </surface>
+    </collision>
+  </gazebo>
+  <!--  Ackermann steering related joints. Not particularly used in case of differential drive steering  -->
+  <joint name="l_ack_link_l_f_wheel_joint" type="revolute">
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <origin rpy="1.570796325 0 3.14159265" xyz="0 0 0"/>
+    <parent link="l_ack_link"/>
+    <child link="l_f_wheel"/>
+    <limit effort="1000000" lower="-0.4" upper="0.4" velocity="20"/>
+  </joint>
+  <joint name="r_ack_link_r_f_wheel_joint" type="revolute">
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <origin rpy="1.570796325 0 3.14159265" xyz="0 0 0"/>
+    <parent link="r_ack_link"/>
+    <child link="r_f_wheel"/>
+    <limit effort="1000000" lower="-0.4" upper="0.4" velocity="20"/>
+
+  </joint>
+  <!--  Back left wheel  -->
+  <link name="l_b_wheel">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://tas2-simulator/models/meshes/model_wheel_left.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tas2-simulator/models/meshes/model_wheel_left_collision.dae"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.00812" ixy="0.0" ixz="0.0" iyy="0.00812" iyz="0.0" izz="0.0156"/>
+    </inertial>
+  </link>
+  <gazebo reference="l_b_wheel">
+    <fdir1>1 0 0</fdir1>
+    <maxContacts>1</maxContacts>
+    <minDepth>0.005</minDepth>
+    <collision>
+      <surface>
+        <friction>
+          <ode>
+            <mu>100000.0</mu>
+            <mu2>100000.0</mu2>
+            <slip1>0.0</slip1>
+            <slip2>0.0</slip2>
+          </ode>
+          <torsional>
+            <coefficient>10.0</coefficient>
+            <surface_radius>1.0</surface_radius>
+            <use_patch_radius>true</use_patch_radius>
+          </torsional>
+        </friction>
+      </surface>
+    </collision>
+  </gazebo>
+  <joint name="base_l_b_wheel_joint" type="revolute">
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <origin rpy="1.570796325 0 3.14159265" xyz="-0.1795 0.19189 0.0435"/>
+    <parent link="base"/>
+    <child link="l_b_wheel"/>
+    <limit upper="1e+16" lower="-1e+16" effort="1e+16" velocity="20"/>
+
+  </joint>
+  <!--  Back right wheel  -->
+  <link name="r_b_wheel">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://tas2-simulator/models/meshes/model_wheel_right.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://tas2-simulator/models/meshes/model_wheel_right_collision.dae"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.00812" ixy="0.0" ixz="0.0" iyy="0.00812" iyz="0.0" izz="0.0156"/>
+    </inertial>
+  </link>
+  <gazebo reference="r_b_wheel">
+    <fdir1>1 0 0</fdir1>
+    <maxContacts>1</maxContacts>
+    <minDepth>0.005</minDepth>
+    <collision>
+      <surface>
+        <friction>
+          <ode>
+            <mu>100000.0</mu>
+            <mu2>100000.0</mu2>
+            <slip1>0.0</slip1>
+            <slip2>0.0</slip2>
+          </ode>
+          <torsional>
+            <coefficient>10.0</coefficient>
+            <surface_radius>1.0</surface_radius>
+            <use_patch_radius>true</use_patch_radius>
+          </torsional>
+        </friction>
+      </surface>
+    </collision>
+  </gazebo>
+  <joint name="base_r_b_wheel_joint" type="revolute">
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <origin rpy="1.570796325 0 3.14159265" xyz="-0.1795 -0.19189 0.0435"/>
+    <parent link="base"/>
+    <child link="r_b_wheel"/>
+    <limit upper="1e+16" lower="-1e+16" effort="1e+16" velocity="20"/>
+  </joint>
+
+  <!-- ************ Front and back lasers related links and joints ************ -->
+  <!--  Front laser support structures, links, joints  -->
+  <link name="laser_sup_front">
+    <visual>
+      <geometry>
+        <box size="0.06 0.06 0.07"/>
+      </geometry>
+      <material name="tas_blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.06 0.06 0.07"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.00071" ixy="0.0" ixz="0.0" iyy="0.00071" iyz="0.0" izz="0.0006"/>
+    </inertial>
+  </link>
+  <joint name="base_laser_sup_front_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.28 0 0.055"/>
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <parent link="base"/>
+    <child link="laser_sup_front"/>
+  </joint>
+  <link name="laser_front_link">
+    <visual>
+      <origin xyz="0 0 -0.025"/>
+      <geometry>
+        <mesh filename="package://tas2-simulator/models/meshes/hokuyo.dae"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.025"/>
+      <geometry>
+        <box size="0.05 0.05 0.07"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
+    </inertial>
+  </link> --> -->
+  <joint name="laser_front_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.28 0.0 0.15"/>
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <parent link="base"/>
+    <child link="laser_front_link"/>
+  </joint>
+  <!--  back laser support structures, links, joints  -->
+  <link name="laser_sup_back">
+    <visual>
+      <geometry>
+        <box size="0.053 0.053 0.06"/>
+      </geometry>
+      <material name="tas_blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.053 0.053 0.06"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.000534" ixy="0.0" ixz="0.0" iyy="0.000534" iyz="0.0" izz="0.00047"/>
+    </inertial>
+  </link>
+  <joint name="base_laser_sup_back_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="-0.28 0 0.05"/>
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <parent link="base"/>
+    <child link="laser_sup_back"/>
+  </joint> -->
+  <link name="laser_back_link">
+    <visual>
+      <origin xyz="0 0 -0.025"/>
+      <geometry>
+        <mesh filename="package://tas2-simulator/models/meshes/hokuyo.dae"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.025"/>
+      <geometry>
+        <box size="0.05 0.05 0.07"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="laser_back_joint" type="fixed">
+    <origin rpy="0 0 3.14159265" xyz="-0.28 0.0 0.14"/>
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <parent link="base"/>
+    <child link="laser_back_link"/>
+  </joint>
+
+  <!-- ************ IMU related links and joints ************ -->
+  <link name="imu_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.02"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.000242" ixy="0" ixz="0" iyy="0.000242" iyz="0" izz="0.000417"/>
+    </inertial>
+  </link>
+  <joint name="imu_link_joint" type="fixed">
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="0.08 0.124 0.115"/>
+    <parent link="base"/>
+    <child link="imu_link"/>
+  </joint>
+</robot>
