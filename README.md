@@ -10,7 +10,7 @@ In the project, we simulated a rescue and search mission. Firstly, we create a s
 Basically our project has 3 main parts.  
 1. **signal_generator package**   Contributor: Yan Wang  
 This package create signal source and publishes the **/signal_info** that allows the planner to estimate the signal source position. More detailed information of this package can be found in the [README file](/src/signal_generator/README.md).
-2. **planner package**   Contributor: Dian Yuan  
+2. **planner package**   Contributor: **Dian Yuan**  
 This package implentent the algrithm to locate the sound source and build a state machine to drive the car to sound source. It also contains a visualization node for a more intuitive view of the sound source in the rviz interface. More info [here](/src/planner/README.md) 
 3. **SLAM and NAV2**   Contributor: Kaustabh Paul  
 For details see package [`mapping`](/src/mapping/README.md) and [`tas2-simulator`](/src/tas2-simulator/README.md).
