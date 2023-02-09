@@ -1,7 +1,7 @@
 # Sound source localization and SLAM
 
 Welcome to our project repository for TAS 2022WS.    
-Member: Dian Yuan, Yan Wang, Kaustabh Paul
+Member: **Dian Yuan**, Yan Wang, Kaustabh Paul
 
 ## Project Description
 In the project, we simulated a rescue and search mission. Firstly, we create a set of signal source points in the environment that represent the rescue targets. After that, we let TAS car detect and try to reach some signal source points in the background and simultaneously use SLAM to create the map. Finally, the map should be completed and thus making it the TAS easier to reach the new signal source point.
@@ -10,14 +10,80 @@ In the project, we simulated a rescue and search mission. Firstly, we create a s
 Basically our project has 3 main parts.  
 1. **signal_generator package**   Contributor: Yan Wang  
 This package create signal source and publishes the **/signal_info** that allows the planner to estimate the signal source position. More detailed information of this package can be found in the [README file](/src/signal_generator/README.md).
-2. **planner package**   Contributor: [Dian Yuan](https://gitlab.lrz.de/ge23coj)  
+2. **planner package**   Contributor: Dian Yuan  
 This package implentent the algrithm to locate the sound source and build a state machine to drive the car to sound source. It also contains a visualization node for a more intuitive view of the sound source in the rviz interface. More info [here](/src/planner/README.md) 
 3. **SLAM and NAV2**   Contributor: Kaustabh Paul  
 For details see package [`mapping`](/src/mapping/README.md) and [`tas2-simulator`](/src/tas2-simulator/README.md).
 ## Getting started
 ### Environment Configuration
-To make sure `tas2-simulator` can successfully run on your computer, you need to have ROS2 Humble installed on Ubuntu22.04, please follow the [Installation Guide](https://gitlab.lrz.de/tas_2223/tas2-simulator#installation-guide) for `tas2-simultor`.
+To make sure `tas2-simulator` can successfully run on your computer, you need to have ROS2 Humble installed on Ubuntu22.04.
 
+### Installation Guide
+The TAS2 simulator is designed using ROS2 and tested for Ubuntu 22.04.
+
+Following are the steps to install the TAS2 simulator.
+
+- Install ROS2. Check the guidelines [here](https://docs.ros.org/en/humble/index.html) for installation. 
+- Install the colcon
+  ```
+  sudo apt install python3-colcon-common-extensions 
+  ```
+- create the workspace and src directories. [Further Information Here](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Colcon-Tutorial.html)
+  ```
+  mkdir -p ~/ros2_ws/src
+  ```
+- Clone this repository to the 'src' directory
+  ```
+  cd ros2_ws/src
+  git clone ""link to the repository here""
+
+  ```
+- The workspace should have the source code of the TAS2-simulator. Your workspace directory should look like this;
+  ```
+  ros2_ws
+  │   build
+  │   install    
+  │   log
+  └───src
+      └───TAS2-simulator
+          │   config
+          │   launch
+          |   maps
+          |   models
+          |   rviz
+          |   CMakeLists.txt
+          │   package.xml
+  ```
+-  Now build the workspace.
+    ```
+    cd ros2_ws
+    colcon build --symlink-install
+    ```
+
+- Remember to source your workspace
+  ```
+    echo "source /usr/share/colcon_cd/function/colcon_cd.sh" >> ~/.bashrc
+    echo "export _colcon_cd_root=/opt/ros/humble/" >> ~/.bashrc
+  ```
+- Before trying the demo, you may need to install extra packages
+  ```
+    sudo apt install ros-humble-joint-state-publisher
+    sudo apt install ros-humble-joint-state-publisher-gui
+    sudo apt install ros-humble-xacro
+    sudo apt install ros-humble-gazebo-ros-pkgs
+    sudo apt install ros-humble-nav2-bringup
+    sudo apt install ros-humble-navigation2
+    sudo apt install ros-humble-robot-localization
+    sudo apt install ros-humble-ackermann-msgs
+    sudo apt install ros-humble-ros2-control
+    sudo apt install ros-humble-ros2-controllers
+    sudo apt install ros-humble-slam-toolbox
+    sudo apt-get install ros-humble-tf2-tools 
+    sudo apt-get install ros-humble-tf-transformations
+    sudo apt-get install ros-humble-nav2-smac-planner
+    sudo apt install ros-humble-navigation2
+    sudo apt install ros-humble-rviz2  
+   ```
 ### How to run it
 
 Clone the repository and cd to the `ws-g6` folder, run 
@@ -73,4 +139,6 @@ We also develop a very simple demo for exploring the room without sound source l
  
 - In our tests, this item requires high CPU performance, and if there is a bottleneck in computer performance it may have an impact on performance.
 
-
+### Thanks
+- Thanks to Chair of Automatic Control Engineering at Technical University of Munich for providing the `tas2-simulator`.  
+- Special thanks to Christian Ott for providing TAS car mesh files and Martin Schuck for designing Gazebo world for N5 basement and related URDF/SDF files.
